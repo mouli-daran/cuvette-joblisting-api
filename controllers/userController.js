@@ -10,6 +10,12 @@ exports.signup = BigPromise(async(req , res , next) => {
         return next(new CustomError("A field is missing , please check your input" , 400))
     };
 
+    const existingUser = await User.findOne({email});
+
+    if (existingUser) {
+        return next(new CustomError('User already exists' , 401))
+    }
+
     const user = await User.create({
         name ,
         email , 
@@ -39,4 +45,16 @@ exports.login = BigPromise(async (req , res , next) => {
         return next (new CustomError('Password is incorrect..Try again',401))
     }
     cookieToken(user , res);
-})
+});
+
+exports.logout = BigPromise(async (req , res , next) => {
+    res.cookie('token' , null , {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    })
+
+    res.status(200).json ({
+        success: true,
+        message: "Logout Success"
+    })
+});
