@@ -16,6 +16,14 @@ const jobSchema = new mongoose.Schema({
     logoUrl: {
         type: String,
         required: true
+    },
+    skills: {
+        type: Array,
+        required: [true, "Skills field are required"]
+    },
+    refUserId: {
+        type: mongoose.Types.ObjectId ,
+        required: true
     }
 });
 
